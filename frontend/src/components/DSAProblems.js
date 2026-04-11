@@ -102,7 +102,7 @@ Return a JSON array. Each element must have exactly these fields:
         });
       });
 
-      const data = await res.json();
+      const data = await response.json();
       
       if (data.error) {
         throw new Error(data.error + (data.details ? `: ${data.details}` : ""));
