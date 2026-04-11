@@ -99,18 +99,133 @@ rl.on('close', () => {
 # Difficulty: ${problem.difficulty || 'Medium'}
 # Topic: ${problem.topic || 'General'}
 
-def solve(*args):
+# Detect problem type and use appropriate function signature
+def get_function_signature(problem_title, problem_topic):
+    title = (problem_title or '').lower()
+    topic = (problem_topic or '').lower()
+    
+    # String problems
+    if 'window' in title and 'substring' in title:
+        return 'def minWindow(s: str, t: str) -> str:'
+    elif 'longest' in title and 'substring' in title:
+        return 'def lengthOfLongestSubstring(s: str) -> int:'
+    elif 'valid' in title and 'parentheses' in title:
+        return 'def isValid(s: str) -> bool:'
+    elif 'palindrome' in title:
+        return 'def isPalindrome(s: str) -> bool:'
+    
+    # Array problems
+    elif 'two sum' in title or 'sum' in title and 'two' in title:
+        return 'def twoSum(nums: List[int], target: int) -> List[int]:'
+    elif 'contains duplicate' in title:
+        return 'def containsDuplicate(nums: List[int]) -> bool:'
+    elif 'maximum' in title and 'subarray' in title:
+        return 'def maxSubArray(nums: List[int]) -> int:'
+    elif 'product' in title and 'array' in title:
+        return 'def productExceptSelf(nums: List[int]) -> List[int]:'
+    
+    # Tree problems
+    elif 'invert' in title and 'tree' in title:
+        return 'def invertTree(root: Optional[TreeNode]) -> Optional[TreeNode]:'
+    elif 'maximum' in title and 'depth' in title:
+        return 'def maxDepth(root: Optional[TreeNode]) -> int:'
+    
+    # Linked List problems
+    elif 'reverse' in title and 'list' in title:
+        return 'def reverseList(head: Optional[ListNode]) -> Optional[ListNode]:'
+    elif 'merge' in title and 'two' in title:
+        return 'def mergeTwoLists(list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:'
+    
+    # Default generic function
+    else:
+        return 'def solve(*args) -> Any:'
+
+# Generate the appropriate function
+${(() => {
+  const title = problem?.title || '';
+  const topic = problem?.topic || '';
+  const title_lower = title.toLowerCase();
+  const topic_lower = topic.toLowerCase();
+  
+  // String problems
+  if (title_lower.includes('window') && title_lower.includes('substring')) {
+    return `def minWindow(s: str, t: str) -> str:
+    # TODO: Implement your solution here
+    # Find the minimum window in s which contains all characters of t
+    pass
+
+# Read input and run the function
+if __name__ == "__main__":
+    import sys
+    import re
+    input_data = sys.stdin.read().strip()
+    
+    if input_data:
+        # Parse string inputs: s = "...", t = "..."
+        s_match = re.search(r's\\s*=\\s*"([^"]*)"', input_data)
+        t_match = re.search(r't\\s*=\\s*"([^"]*)"', input_data)
+        
+        if s_match and t_match:
+            s = s_match.group(1)
+            t = t_match.group(1)
+            result = minWindow(s, t)
+        else:
+            # Fallback parsing
+            result = minWindow("ADOBECODEBANC", "ABC")
+    else:
+        result = minWindow("ADOBECODEBANC", "ABC")
+        
+    print(result)`;
+  }
+  
+  // Array problems
+  else if (title_lower.includes('two sum') || (title_lower.includes('sum') && title_lower.includes('two'))) {
+    return `def twoSum(nums: List[int], target: int) -> List[int]:
+    # TODO: Implement your solution here
+    # Find indices of two numbers that add up to target
+    pass
+
+# Read input and run the function
+if __name__ == "__main__":
+    import sys
+    import re
+    from typing import List
+    
+    input_data = sys.stdin.read().strip()
+    
+    if input_data:
+        # Parse array inputs: nums = [...], target = ...
+        nums_match = re.search(r'nums\\s*=\\s*(\\[.*?\\])', input_data)
+        target_match = re.search(r'target\\s*=\\s*(\\d+)', input_data)
+        
+        if nums_match:
+            nums = eval(nums_match.group(1))
+            if target_match:
+                target = int(target_match.group(1))
+                result = twoSum(nums, target)
+            else:
+                result = twoSum(nums, 9)  # default target
+        else:
+            # Fallback parsing
+            result = twoSum([2,7,11,15], 9)
+    else:
+        result = twoSum([2,7,11,15], 9)
+        
+    print(result)`;
+  }
+  
+  // Default generic function
+  else {
+    return `def solve(*args) -> Any:
     # TODO: Implement your solution here
     # Handle different problem types based on input
     if len(args) == 2:
         # Two parameters (e.g., s and t for string problems)
         s, t = args
-        # Implement your solution for string problems
         pass
     elif len(args) == 1:
         # Single parameter (e.g., nums for array problems)
         nums = args[0]
-        # Implement your solution for array problems
         pass
     else:
         # Default case
@@ -120,27 +235,28 @@ def solve(*args):
 if __name__ == "__main__":
     import sys
     import re
+    from typing import Any, List
+    
     input_data = sys.stdin.read().strip()
     
     if input_data:
         try:
             # Check for string inputs (s = "...", t = "...")
-            s_match = re.search(r's\s*=\s*"([^"]*)"', input_data)
-            t_match = re.search(r't\s*=\s*"([^"]*)"', input_data)
+            s_match = re.search(r's\\s*=\\s*"([^"]*)"', input_data)
+            t_match = re.search(r't\\s*=\\s*"([^"]*)"', input_data)
             
             if s_match and t_match:
-                # String problem (e.g., minimum window substring)
+                # String problem
                 s = s_match.group(1)
                 t = t_match.group(1)
                 result = solve(s, t)
             else:
                 # Check for array inputs (nums = [...], target = ...)
-                nums_match = re.search(r'nums\s*=\s*(\[.*?\])', input_data)
+                nums_match = re.search(r'nums\\s*=\\s*(\\[.*?\\])', input_data)
                 if nums_match:
                     nums = eval(nums_match.group(1))
                     
-                    # Extract target if present
-                    target_match = re.search(r'target\s*=\s*(\d+)', input_data)
+                    target_match = re.search(r'target\\s*=\\s*(\\d+)', input_data)
                     if target_match:
                         target = int(target_match.group(1))
                         result = solve(nums, target)
@@ -163,7 +279,9 @@ if __name__ == "__main__":
         # Default test case
         result = solve([10,9,2,5,3,7,101,18])
         
-    print(result)`,
+    print(result)`;
+  }
+})()}`,
       
       java: `// ${problem.title || 'DSA Problem'}
 // Difficulty: ${problem.difficulty || 'Medium'}
