@@ -1,0 +1,305 @@
+/* ============================================================
+   CodeEditor.css - Styling for the code editor component
+   ============================================================ */
+
+.code-editor {
+  background: #1e1e1e;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #333;
+}
+
+.editor-header h3 {
+  color: #fff;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.editor-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.language-select {
+  background: #2d2d2d;
+  color: #fff;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.language-select:focus {
+  outline: none;
+  border-color: #007acc;
+}
+
+.run-button {
+  background: #007acc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.run-button:hover:not(:disabled) {
+  background: #005a9e;
+}
+
+.run-button:disabled {
+  background: #555;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.submit-button {
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submit-button:hover:not(:disabled) {
+  background: #dc2626;
+}
+
+.submit-button:disabled {
+  background: #555;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.functions-button {
+  background: #6b7280;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.functions-button:hover {
+  background: #4b5563;
+}
+
+.functions-button.active {
+  background: #8b5cf6;
+}
+
+.functions-button.active:hover {
+  background: #7c3aed;
+}
+
+.functions-button:disabled {
+  background: #555;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.editor-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.code-section {
+  min-height: 400px;
+}
+
+.io-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.section-label {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.input-textarea,
+.output-textarea {
+  width: 100%;
+  height: 180px;
+  background: #2d2d2d;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #fff;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 13px;
+  padding: 8px;
+  resize: vertical;
+}
+
+.input-textarea:focus {
+  outline: none;
+  border-color: #007acc;
+}
+
+.output-textarea {
+  resize: none;
+  background: #252526;
+}
+
+.output-textarea.running {
+  background: #2d2d2d;
+  color: #888;
+}
+
+.examples-section {
+  background: #2d2d2d;
+  border-radius: 6px;
+  padding: 16px;
+}
+
+.example-case {
+  background: #1e1e1e;
+  border-radius: 4px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.example-case:last-child {
+  margin-bottom: 0;
+}
+
+.example-io {
+  margin-bottom: 8px;
+}
+
+.example-label {
+  color: #007acc;
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.example-io pre {
+  background: #252526;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 8px;
+  margin: 4px 0 0 0;
+  color: #d4d4d4;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 13px;
+  overflow-x: auto;
+}
+
+.example-explanation {
+  margin-top: 12px;
+}
+
+.example-explanation p {
+  color: #cccccc;
+  font-size: 13px;
+  line-height: 1.4;
+  margin: 4px 0 0 0;
+}
+
+.submission-status {
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  border: 2px solid;
+}
+
+.submission-status.success {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: #10b981;
+}
+
+.submission-status.failed {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #ef4444;
+}
+
+.status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status-icon {
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkmark {
+  color: #10b981;
+  font-size: 18px;
+  font-weight: 900;
+  text-shadow: 0 0 4px rgba(16, 185, 129, 0.3);
+}
+
+.submission-status.success .status-icon {
+  color: #10b981;
+}
+
+.submission-status.failed .status-icon {
+  color: #ef4444;
+}
+
+.status-details {
+  color: #cccccc;
+  font-size: 13px;
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+  .editor-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .io-section {
+    grid-row: 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .editor-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  
+  .editor-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
