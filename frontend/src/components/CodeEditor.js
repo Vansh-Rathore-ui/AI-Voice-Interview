@@ -404,137 +404,7 @@ if __name__ == "__main__":
   }
 })()}`,
       
-      java: `// ${problem.title || 'DSA Problem'}
-// Difficulty: ${problem.difficulty || 'Medium'}
-// Topic: ${problem.topic || 'General'}
-
-import java.util.*;
-
-${(() => {
-  const title = problem?.title || '';
-  const topic = problem?.topic || '';
-  const title_lower = title.toLowerCase();
-  const topic_lower = topic.toLowerCase();
-  
-  // String problems
-  if (title_lower.includes('window') && title_lower.includes('substring')) {
-    return `public class Main {
-    public static String minWindow(String s, String t) {
-        // TODO: Implement your solution here
-        // Find the minimum window in s which contains all characters of t
-        return "";
-    }
-    
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine().trim();
-        
-        String s = "", t = "";
-        if (input.isEmpty()) {
-            s = "ADOBECODEBANC";
-            t = "ABC";
-        } else {
-            // Parse string inputs: s = "...", t = "..."
-            if (input.contains("s = ")) {
-                s = input.replaceAll(".*s\\s*=\\s*\\"([^\\"]*)\\".*", "$1");
-            }
-            if (input.contains("t = ")) {
-                t = input.replaceAll(".*t\\s*=\\s*\\"([^\\"]*)\\".*", "$1");
-            }
             
-            if (s.isEmpty()) s = "ADOBECODEBANC";
-            if (t.isEmpty()) t = "ABC";
-        }
-        
-        String result = minWindow(s, t);
-        System.out.println(result);
-        scanner.close();
-    }
-}`;
-  }
-  
-  // Array problems
-  else if (title_lower.includes('two sum') || (title_lower.includes('sum') && title_lower.includes('two'))) {
-    return `public class Main {
-    public static int[] twoSum(int[] nums, int target) {
-        // TODO: Implement your solution here
-        // Find indices of two numbers that add up to target
-        return new int[0];
-    }
-    
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine().trim();
-        
-        int[] nums;
-        int target = 9; // default target
-        
-        if (input.isEmpty()) {
-            nums = new int[]{2,7,11,15};
-        } else {
-            // Parse array inputs: nums = [...], target = ...
-            if (input.contains("nums = ")) {
-                String numsStr = input.replaceAll(".*nums\\s*=\\s*(\\[.*?\\]).*", "$1");
-                numsStr = numsStr.replaceAll("[\\[\\]]", "").trim();
-                String[] parts = numsStr.split("[,\\s]+");
-                nums = new int[parts.length];
-                for (int i = 0; i < parts.length; i++) {
-                    nums[i] = Integer.parseInt(parts[i]);
-                }
-            } else {
-                // Fallback parsing
-                String[] parts = input.split("[,\\s]+");
-                nums = new int[parts.length];
-                for (int i = 0; i < parts.length; i++) {
-                    nums[i] = Integer.parseInt(parts[i]);
-                }
-            }
-            
-            if (input.contains("target = ")) {
-                target = Integer.parseInt(input.replaceAll(".*target\\s*=\\s*(\\d+).*", "$1"));
-            }
-        }
-        
-        int[] result = twoSum(nums, target);
-        System.out.println(Arrays.toString(result));
-        scanner.close();
-    }
-}`;
-  }
-  
-  // Default generic function
-  else {
-    return `public class Main {
-    public static int solve(int[] nums) {
-        // TODO: Implement your solution here
-        return nums.length; // placeholder
-    }
-    
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine().trim();
-        
-        int[] nums;
-        if (input.isEmpty()) {
-            nums = new int[]{10,9,2,5,3,7,101,18}; // default test case
-        } else {
-            // Parse input like [1,2,3] or 1 2 3
-            input = input.replaceAll("[\\[\\]]", "").trim();
-            String[] parts = input.split("[,\\s]+");
-            nums = new int[parts.length];
-            for (int i = 0; i < parts.length; i++) {
-                nums[i] = Integer.parseInt(parts[i]);
-            }
-        }
-        
-        int result = solve(nums);
-        System.out.println(result);
-        scanner.close();
-    }
-}`;
-  }
-})()}`,
-      
       cpp: `// ${problem.title || 'DSA Problem'}
 // Difficulty: ${problem.difficulty || 'Medium'}
 // Topic: ${problem.topic || 'General'}
@@ -727,38 +597,143 @@ int main() {
   };
 
   const generateHiddenTestCases = (problem) => {
-    // Generate more challenging hidden test cases based on problem type
+    // Generate sophisticated hidden test cases based on specific problem
     const testCases = [];
+    const title = (problem?.title || '').toLowerCase();
+    const topic = (problem?.topic || '').toLowerCase();
     
-    if (problem?.topic?.includes('Array') || problem?.title?.includes('Array')) {
-      // Array problems - test edge cases
+    // Minimum Window Substring
+    if (title.includes('window') && title.includes('substring')) {
+      testCases.push(
+        { input: 's = "a", t = "a"', output: '"a"' },
+        { input: 's = "a", t = "aa"', output: '""' },
+        { input: 's = "aa", t = "aa"', output: '"aa"' },
+        { input: 's = "ab", t = "b"', output: '"b"' },
+        { input: 's = "abcdebdde", t = "bde"', output: '"bdde"' },
+        { input: 's = "aaaaaaaaaaaabbbbbcddddddeeeeeeeaaaaaffffffffffffgggggggggghhhhhhhhh", t = "abcdefg"', output: '"abbbbbcddddddeeeeeeeaaaaaffffffffffffggggggggg"' },
+        { input: 's = "", t = "a"', output: '""' },
+        { input: 's = "abc", t = ""', output: '""' }
+      );
+    }
+    
+    // Two Sum
+    else if (title.includes('two sum') || (title.includes('sum') && title.includes('two'))) {
+      testCases.push(
+        { input: 'nums = [0,4,3,0], target = 0', output: '[0,3]' },
+        { input: 'nums = [-3,4,3,90], target = 0', output: '[0,2]' },
+        { input: 'nums = [1,2,3,4,5], target = 10', output: '[3,4]' },
+        { input: 'nums = [-1,-2,-3,-4,-5], target = -8', output: '[2,4]' },
+        { input: 'nums = [2,5,5,11], target = 10', output: '[1,2]' },
+        { input: 'nums = [3,2,4], target = 6', output: '[1,2]' },
+        { input: 'nums = [3,3], target = 6', output: '[0,1]' }
+      );
+    }
+    
+    // Longest Substring Without Repeating Characters
+    else if (title.includes('longest') && title.includes('substring')) {
+      testCases.push(
+        { input: 's = ""', output: '0' },
+        { input: 's = "a"', output: '1' },
+        { input: 's = "aa"', output: '1' },
+        { input: 's = "abcabcbb"', output: '3' },
+        { input: 's = "bbbbb"', output: '1' },
+        { input: 's = "pwwkew"', output: '3' },
+        { input: 's = "dvdf"', output: '3' },
+        { input: 's = "abcdefghijklmnopqrstuvwxyz"', output: '26' }
+      );
+    }
+    
+    // Valid Parentheses
+    else if (title.includes('valid') && title.includes('parentheses')) {
+      testCases.push(
+        { input: 's = ""', output: 'true' },
+        { input: 's = "()', output: 'true' },
+        { input: 's = "()[]{}"', output: 'true' },
+        { input: 's = "(]"', output: 'false' },
+        { input: 's = "([)]"', output: 'false' },
+        { input: 's = "{[]}"', output: 'true' },
+        { input: 's = "((((((((((', output: 'false' },
+        { input: 's = ")))))))))"', output: 'false' }
+      );
+    }
+    
+    // Contains Duplicate
+    else if (title.includes('contains duplicate')) {
+      testCases.push(
+        { input: 'nums = [1,2,3,1]', output: 'true' },
+        { input: 'nums = [1,2,3,4]', output: 'false' },
+        { input: 'nums = [1,1,1,3,3,4,3,2,4,2]', output: 'true' },
+        { input: 'nums = []', output: 'false' },
+        { input: 'nums = [1]', output: 'false' },
+        { input: 'nums = [0,0,0,0]', output: 'true' },
+        { input: 'nums = [-1,-2,-3,-1]', output: 'true' }
+      );
+    }
+    
+    // Maximum Subarray
+    else if (title.includes('maximum') && title.includes('subarray')) {
+      testCases.push(
+        { input: 'nums = [-2,1,-3,4,-1,2,1,-5,4]', output: '6' },
+        { input: 'nums = [1]', output: '1' },
+        { input: 'nums = [5,4,-1,7,8]', output: '23' },
+        { input: 'nums = [-1,-2,-3,-4]', output: '-1' },
+        { input: 'nums = [-2,-1]', output: '-1' },
+        { input: 'nums = [0,0,0,0]', output: '0' },
+        { input: 'nums = [2,3,-2,4]', output: '7' }
+      );
+    }
+    
+    // Product of Array Except Self
+    else if (title.includes('product') && title.includes('array')) {
+      testCases.push(
+        { input: 'nums = [1,2,3,4]', output: '[24,12,8,6]' },
+        { input: 'nums = [-1,1,0,-3,3]', output: '[0,0,9,0,0]' },
+        { input: 'nums = [1,2]', output: '[2,1]' },
+        { input: 'nums = [0,0]', output: '[0,0]' },
+        { input: 'nums = [-1,-1,-1,-1]', output: '[-1,-1,-1,-1]' },
+        { input: 'nums = [1,0,1,0]', output: '[0,0,0,0]' }
+      );
+    }
+    
+    // Generic Array Problems (fallback)
+    else if (topic.includes('array') || title.includes('array')) {
       testCases.push(
         { input: '[]', output: '0' },
         { input: '[1]', output: '1' },
         { input: '[1,1,1,1]', output: '1' },
         { input: '[-1,-2,-3]', output: '2' },
-        { input: '[1000,999,998]', output: '1' }
+        { input: '[1000,999,998]', output: '1' },
+        { input: '[2,7,11,15]', output: '4' },
+        { input: '[3,2,1]', output: '3' },
+        { input: '[0,0,0]', output: '1' }
       );
     }
     
-    if (problem?.topic?.includes('String') || problem?.title?.includes('String')) {
-      // String problems
+    // Generic String Problems (fallback)
+    else if (topic.includes('string') || title.includes('string')) {
       testCases.push(
-        { input: '""', output: '0' },
-        { input: '"a"', output: '1' },
-        { input: '"aaaa"', output: '1' },
-        { input: '"abc"', output: '3' }
+        { input: '""', output: '""' },
+        { input: '"a"', output: '"a"' },
+        { input: '"aaaa"', output: '"a"' },
+        { input: '"abc"', output: '"abc"' },
+        { input: '"racecar"', output: '"racecar"' },
+        { input: '"hello"', output: '"olleh"' },
+        { input: '"12345"', output: '"12345"' },
+        { input: '"!@#$%"', output: '"%$#@!"' }
       );
     }
     
-    // Default hidden test cases
+    // Default hidden test cases (ultimate fallback)
     if (testCases.length === 0) {
       testCases.push(
         { input: '[1,2,3,4,5]', output: '5' },
         { input: '[5,4,3,2,1]', output: '5' },
         { input: '[2,2,2,2,2]', output: '1' },
         { input: '[]', output: '0' },
-        { input: '[100]', output: '1' }
+        { input: '[100]', output: '1' },
+        { input: '[-1,-2,-3,-4]', output: '4' },
+        { input: '[0]', output: '1' },
+        { input: '[1,2,2,3,3,3]', output: '3' }
       );
     }
     
@@ -781,13 +756,12 @@ int main() {
         <h3>Code Editor</h3>
         <div className="editor-controls">
           <select 
-            value={language} 
+            value={language}
             onChange={(e) => handleLanguageChange(e.target.value)}
             className="language-select"
           >
             <option value="javascript">JavaScript</option>
             <option value="python">Python</option>
-            <option value="java">Java</option>
             <option value="cpp">C++</option>
           </select>
           <button 
