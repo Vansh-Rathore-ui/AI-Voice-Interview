@@ -99,14 +99,21 @@ rl.on('close', () => {
 # Difficulty: ${problem.difficulty || 'Medium'}
 # Topic: ${problem.topic || 'General'}
 
-def solve(nums, target=None):
+def solve(*args):
     # TODO: Implement your solution here
-    # Handle both single parameter (nums) and double parameter (nums, target) problems
-    if target is not None:
-        # Problem with target parameter
+    # Handle different problem types based on input
+    if len(args) == 2:
+        # Two parameters (e.g., s and t for string problems)
+        s, t = args
+        # Implement your solution for string problems
+        pass
+    elif len(args) == 1:
+        # Single parameter (e.g., nums for array problems)
+        nums = args[0]
+        # Implement your solution for array problems
         pass
     else:
-        # Problem with only nums parameter
+        # Default case
         pass
 
 # Read input and run the function
@@ -116,34 +123,46 @@ if __name__ == "__main__":
     input_data = sys.stdin.read().strip()
     
     if input_data:
-        # Parse input format like "nums = [1,2,3], target = 4"
         try:
-            # Extract nums array
-            nums_match = re.search(r'nums\s*=\s*(\[.*?\])', input_data)
-            if nums_match:
-                nums = eval(nums_match.group(1))
-            else:
-                # Fallback to simple list format
-                nums = eval(input_data)
+            # Check for string inputs (s = "...", t = "...")
+            s_match = re.search(r's\s*=\s*"([^"]*)"', input_data)
+            t_match = re.search(r't\s*=\s*"([^"]*)"', input_data)
             
-            # Extract target if present
-            target_match = re.search(r'target\s*=\s*(\d+)', input_data)
-            if target_match:
-                target = int(target_match.group(1))
-                # For problems with target, pass both nums and target
-                result = solve(nums, target)
+            if s_match and t_match:
+                # String problem (e.g., minimum window substring)
+                s = s_match.group(1)
+                t = t_match.group(1)
+                result = solve(s, t)
             else:
-                # For problems without target, just pass nums
-                result = solve(nums)
-                
+                # Check for array inputs (nums = [...], target = ...)
+                nums_match = re.search(r'nums\s*=\s*(\[.*?\])', input_data)
+                if nums_match:
+                    nums = eval(nums_match.group(1))
+                    
+                    # Extract target if present
+                    target_match = re.search(r'target\s*=\s*(\d+)', input_data)
+                    if target_match:
+                        target = int(target_match.group(1))
+                        result = solve(nums, target)
+                    else:
+                        result = solve(nums)
+                else:
+                    # Fallback to simple list format
+                    nums = eval(input_data)
+                    result = solve(nums)
+                    
         except:
-            # Fallback parsing
-            nums = list(map(int, input_data.split()))
-            result = solve(nums)
+            # Fallback parsing for simple integer arrays
+            try:
+                nums = list(map(int, input_data.split()))
+                result = solve(nums)
+            except:
+                # If all else fails, use default test case
+                result = solve([10,9,2,5,3,7,101,18])
     else:
-        nums = [10,9,2,5,3,7,101,18]  # default test case
-        result = solve(nums)
-    
+        # Default test case
+        result = solve([10,9,2,5,3,7,101,18])
+        
     print(result)`,
       
       java: `// ${problem.title || 'DSA Problem'}
