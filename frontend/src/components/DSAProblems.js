@@ -93,9 +93,20 @@ Return a JSON array. Each element must have exactly these fields:
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
       
-      const data = await response.json().catch(jsonError => {
-        throw new Error(`Invalid JSON response: ${jsonError.message}`);
-      });
+      // Get response text first to debug
+      const responseText = await response.text();
+      console.log('Raw response:', responseText);
+      
+      if (!responseText) {
+        throw new Error('Empty response from server');
+      }
+      
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (jsonError) {
+        throw new Error(`Invalid JSON response: ${jsonError.message}. Raw response: ${responseText.substring(0, 200)}`);
+      }
       
       if (data.error) {
         throw new Error(data.error + (data.details ? `: ${data.details}` : ""));
