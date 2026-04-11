@@ -74,36 +74,20 @@ Return a JSON array. Each element must have exactly these fields:
 }`;
 
     try {
-      let response;
-      try {
-        response = await fetch('/oxlo-proxy', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            model: "llama-3.2-3b",
-            max_tokens: 1000,
-            system: systemPrompt,
-            messages: [{ role: "user", content: userPrompt }],
-          }),
-        });
-      } catch (proxyError) {
-        // Fallback to direct API call if proxy fails
-        console.warn('Proxy failed, trying direct API:', proxyError);
-        response = await fetch('https://ai-voice-interview.onrender.com/oxlo-proxy', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            model: "llama-3.2-3b",
-            max_tokens: 1000,
-            system: systemPrompt,
-            messages: [{ role: "user", content: userPrompt }],
-          }),
-        });
-      }
+      console.log('Using direct API: https://ai-voice-interview.onrender.com/oxlo-proxy');
+      const response = await fetch('https://ai-voice-interview.onrender.com/oxlo-proxy', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: "llama-3.2-3b",
+          max_tokens: 1000,
+          system: systemPrompt,
+          messages: [{ role: "user", content: userPrompt }],
+        }),
+      });
+      console.log('Direct API response status:', response.status);
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
