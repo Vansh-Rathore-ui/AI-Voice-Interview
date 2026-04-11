@@ -75,19 +75,27 @@ Return a JSON array. Each element must have exactly these fields:
 
     try {
       console.log('Using direct API: https://ai-voice-interview.onrender.com/oxlo-proxy');
+      
+      const requestBody = JSON.stringify({
+        model: "llama-3.2-3b",
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: [{ role: "user", content: userPrompt }],
+      });
+      console.log('Request body:', requestBody);
+      
       const response = await fetch('https://ai-voice-interview.onrender.com/oxlo-proxy', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          model: "llama-3.2-3b",
-          max_tokens: 1000,
-          system: systemPrompt,
-          messages: [{ role: "user", content: userPrompt }],
-        }),
+        body: requestBody,
       });
-      console.log('Direct API response status:', response.status);
+      
+      console.log('Response status:', response.status);
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+      console.log('Response type:', response.type);
+      console.log('Response url:', response.url);
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -95,10 +103,16 @@ Return a JSON array. Each element must have exactly these fields:
       
       // Get response text first to debug
       const responseText = await response.text();
-      console.log('Raw response:', responseText);
+      console.log('Raw response length:', responseText.length);
+      console.log('Raw response (first 500 chars):', responseText.substring(0, 500));
+      console.log('Raw response (last 500 chars):', responseText.length > 500 ? responseText.substring(responseText.length - 500) : responseText);
       
       if (!responseText) {
         throw new Error('Empty response from server');
+      }
+      
+      if (responseText.length === 0) {
+        throw new Error('Response is empty');
       }
       
       let data;

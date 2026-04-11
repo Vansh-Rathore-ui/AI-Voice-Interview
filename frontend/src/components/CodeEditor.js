@@ -203,23 +203,43 @@ int main() {
     setSubmissionResult(null);
     
     try {
-      const response = await fetch('/execute-code', {
+      console.log('Using direct API for code execution: https://ai-voice-interview.onrender.com/execute-code');
+      
+      const requestBody = JSON.stringify({
+        language,
+        code,
+        input,
+        testCases: problem?.examples?.map(ex => ({
+          input: ex.input,
+          output: ex.output
+        })) || []
+      });
+      console.log('Code execution request body:', requestBody);
+      
+      const response = await fetch('https://ai-voice-interview.onrender.com/execute-code', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          language,
-          code,
-          input,
-          testCases: problem?.examples?.map(ex => ({
-            input: ex.input,
-            output: ex.output
-          })) || []
-        }),
+        body: requestBody,
       });
-
-      const result = await response.json();
+      
+      console.log('Code execution response status:', response.status);
+      
+      // Get response text first to debug
+      const responseText = await response.text();
+      console.log('Code execution raw response:', responseText);
+      
+      if (!responseText) {
+        throw new Error('Empty response from code execution server');
+      }
+      
+      let result;
+      try {
+        result = JSON.parse(responseText);
+      } catch (jsonError) {
+        throw new Error(`Invalid JSON response from code execution: ${jsonError.message}. Raw response: ${responseText.substring(0, 200)}`);
+      }
       
       if (!response.ok) {
         throw new Error(result.error || 'Execution failed');
@@ -276,19 +296,39 @@ int main() {
       // Generate hidden test cases (more challenging than examples)
       const hiddenTestCases = generateHiddenTestCases(problem);
       
-      const response = await fetch('/execute-code', {
+      console.log('Using direct API for submission: https://ai-voice-interview.onrender.com/execute-code');
+      
+      const requestBody = JSON.stringify({
+        language,
+        code,
+        testCases: hiddenTestCases
+      });
+      console.log('Submission request body:', requestBody);
+      
+      const response = await fetch('https://ai-voice-interview.onrender.com/execute-code', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          language,
-          code,
-          testCases: hiddenTestCases
-        }),
+        body: requestBody,
       });
-
-      const result = await response.json();
+      
+      console.log('Submission response status:', response.status);
+      
+      // Get response text first to debug
+      const responseText = await response.text();
+      console.log('Submission raw response:', responseText);
+      
+      if (!responseText) {
+        throw new Error('Empty response from submission server');
+      }
+      
+      let result;
+      try {
+        result = JSON.parse(responseText);
+      } catch (jsonError) {
+        throw new Error(`Invalid JSON response from submission: ${jsonError.message}. Raw response: ${responseText.substring(0, 200)}`);
+      }
       
       if (!response.ok) {
         throw new Error(result.error || 'Submission failed');
