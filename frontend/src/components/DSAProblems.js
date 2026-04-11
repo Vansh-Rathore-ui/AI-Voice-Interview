@@ -74,15 +74,32 @@ Return a JSON array. Each element must have exactly these fields:
 }`;
 
     try {
-      const res = await fetch("/oxlo-proxy", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('/oxlo-proxy', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           model: "llama-3.2-3b",
           max_tokens: 1000,
           system: systemPrompt,
           messages: [{ role: "user", content: userPrompt }],
         }),
+      }).catch(async (proxyError) => {
+        // Fallback to direct API call if proxy fails
+        console.warn('Proxy failed, trying direct API:', proxyError);
+        return fetch('https://ai-voice-interview.onrender.com/oxlo-proxy', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: "llama-3.2-3b",
+            max_tokens: 1000,
+            system: systemPrompt,
+            messages: [{ role: "user", content: userPrompt }],
+          }),
+        });
       });
 
       const data = await res.json();
