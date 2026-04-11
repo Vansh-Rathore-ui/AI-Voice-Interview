@@ -74,21 +74,9 @@ Return a JSON array. Each element must have exactly these fields:
 }`;
 
     try {
-      const response = await fetch('/oxlo-proxy', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: "llama-3.2-3b",
-          max_tokens: 1000,
-          system: systemPrompt,
-          messages: [{ role: "user", content: userPrompt }],
-        }),
-      }).catch(async (proxyError) => {
-        // Fallback to direct API call if proxy fails
-        console.warn('Proxy failed, trying direct API:', proxyError);
-        return fetch('https://ai-voice-interview.onrender.com/oxlo-proxy', {
+      let response;
+      try {
+        response = await fetch('/oxlo-proxy', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -100,9 +88,30 @@ Return a JSON array. Each element must have exactly these fields:
             messages: [{ role: "user", content: userPrompt }],
           }),
         });
-      });
+      } catch (proxyError) {
+        // Fallback to direct API call if proxy fails
+        console.warn('Proxy failed, trying direct API:', proxyError);
+        response = await fetch('https://ai-voice-interview.onrender.com/oxlo-proxy', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: "llama-3.2-3b",
+            max_tokens: 1000,
+            system: systemPrompt,
+            messages: [{ role: "user", content: userPrompt }],
+          }),
+        });
+      }
 
-      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      
+      const data = await response.json().catch(jsonError => {
+        throw new Error(`Invalid JSON response: ${jsonError.message}`);
+      });
       
       if (data.error) {
         throw new Error(data.error + (data.details ? `: ${data.details}` : ""));
