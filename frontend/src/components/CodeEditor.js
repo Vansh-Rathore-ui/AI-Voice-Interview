@@ -35,7 +35,126 @@ export default function CodeEditor({ problem, onRunCode }) {
 // Difficulty: ${problem.difficulty || 'Medium'}
 // Topic: ${problem.topic || 'General'}
 
-function solve(nums, target) {
+${(() => {
+  const title = problem?.title || '';
+  const topic = problem?.topic || '';
+  const title_lower = title.toLowerCase();
+  const topic_lower = topic.toLowerCase();
+  
+  // String problems
+  if (title_lower.includes('window') && title_lower.includes('substring')) {
+    return `/**
+ * @param {string} s
+ * @param {string} t
+ * @return {string}
+ */
+function minWindow(s, t) {
+    // TODO: Implement your solution here
+    // Find the minimum window in s which contains all characters of t
+    return "";
+}
+
+// Read input and run the function
+const readline = require('readline');
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+let input = '';
+rl.on('line', (line) => {
+    input += line;
+});
+
+rl.on('close', () => {
+    if (input.trim()) {
+        try {
+            // Parse string inputs: s = "...", t = "..."
+            const sMatch = input.match(/s\\s*=\\s*"([^"]*)"/);
+            const tMatch = input.match(/t\\s*=\\s*"([^"]*)"/);
+            
+            if (sMatch && tMatch) {
+                const s = sMatch[1];
+                const t = tMatch[1];
+                const result = minWindow(s, t);
+                console.log(result);
+            } else {
+                // Fallback
+                const result = minWindow("ADOBECODEBANC", "ABC");
+                console.log(result);
+            }
+        } catch (error) {
+            console.error("Input parsing error:", error.message);
+        }
+    } else {
+        // Default test case
+        const result = minWindow("ADOBECODEBANC", "ABC");
+        console.log(result);
+    }
+});`;
+  }
+  
+  // Array problems
+  else if (title_lower.includes('two sum') || (title_lower.includes('sum') && title_lower.includes('two'))) {
+    return `/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number[]}
+ */
+function twoSum(nums, target) {
+    // TODO: Implement your solution here
+    // Find indices of two numbers that add up to target
+    return [];
+}
+
+// Read input and run the function
+const readline = require('readline');
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+let input = '';
+rl.on('line', (line) => {
+    input += line;
+});
+
+rl.on('close', () => {
+    if (input.trim()) {
+        try {
+            // Parse array inputs: nums = [...], target = ...
+            const numsMatch = input.match(/nums\\s*=\\s*(\\[.*?\\])/);
+            const targetMatch = input.match(/target\\s*=\\s*(\\d+)/);
+            
+            if (numsMatch) {
+                const nums = JSON.parse(numsMatch[1]);
+                if (targetMatch) {
+                    const target = parseInt(targetMatch[1]);
+                    const result = twoSum(nums, target);
+                    console.log(result);
+                } else {
+                    const result = twoSum(nums, 9); // default target
+                    console.log(result);
+                }
+            } else {
+                // Fallback parsing
+                const result = twoSum([2,7,11,15], 9);
+                console.log(result);
+            }
+        } catch (error) {
+            console.error("Input parsing error:", error.message);
+        }
+    } else {
+        // Default test case
+        const result = twoSum([2,7,11,15], 9);
+        console.log(result);
+    }
+});`;
+  }
+  
+  // Default generic function
+  else {
+    return `function solve(nums, target) {
     // TODO: Implement your solution here
     // Handle both single parameter (nums) and double parameter (nums, target) problems
     if (target !== undefined) {
@@ -64,8 +183,8 @@ rl.on('close', () => {
     if (input.trim()) {
         try {
             // Parse input format like "nums = [1,2,3], target = 4"
-            const numsMatch = input.match(/nums\s*=\s*(\[.*?\])/);
-            const targetMatch = input.match(/target\s*=\s*(\d+)/);
+            const numsMatch = input.match(/nums\\s*=\\s*(\\[.*?\\])/);
+            const targetMatch = input.match(/target\\s*=\\s*(\\d+)/);
             
             if (numsMatch) {
                 nums = JSON.parse(numsMatch[1]);
@@ -93,7 +212,9 @@ rl.on('close', () => {
         const result = solve(nums);
         console.log(result);
     }
-});`,
+});`;
+  }
+})()}`,
       
       python: `# ${problem.title || 'DSA Problem'}
 # Difficulty: ${problem.difficulty || 'Medium'}
@@ -289,7 +410,101 @@ if __name__ == "__main__":
 
 import java.util.*;
 
-public class Main {
+${(() => {
+  const title = problem?.title || '';
+  const topic = problem?.topic || '';
+  const title_lower = title.toLowerCase();
+  const topic_lower = topic.toLowerCase();
+  
+  // String problems
+  if (title_lower.includes('window') && title_lower.includes('substring')) {
+    return `public class Main {
+    public static String minWindow(String s, String t) {
+        // TODO: Implement your solution here
+        // Find the minimum window in s which contains all characters of t
+        return "";
+    }
+    
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine().trim();
+        
+        String s = "", t = "";
+        if (input.isEmpty()) {
+            s = "ADOBECODEBANC";
+            t = "ABC";
+        } else {
+            // Parse string inputs: s = "...", t = "..."
+            if (input.contains("s = ")) {
+                s = input.replaceAll(".*s\\s*=\\s*\\"([^\\"]*)\\".*", "$1");
+            }
+            if (input.contains("t = ")) {
+                t = input.replaceAll(".*t\\s*=\\s*\\"([^\\"]*)\\".*", "$1");
+            }
+            
+            if (s.isEmpty()) s = "ADOBECODEBANC";
+            if (t.isEmpty()) t = "ABC";
+        }
+        
+        String result = minWindow(s, t);
+        System.out.println(result);
+        scanner.close();
+    }
+}`;
+  }
+  
+  // Array problems
+  else if (title_lower.includes('two sum') || (title_lower.includes('sum') && title_lower.includes('two'))) {
+    return `public class Main {
+    public static int[] twoSum(int[] nums, int target) {
+        // TODO: Implement your solution here
+        // Find indices of two numbers that add up to target
+        return new int[0];
+    }
+    
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine().trim();
+        
+        int[] nums;
+        int target = 9; // default target
+        
+        if (input.isEmpty()) {
+            nums = new int[]{2,7,11,15};
+        } else {
+            // Parse array inputs: nums = [...], target = ...
+            if (input.contains("nums = ")) {
+                String numsStr = input.replaceAll(".*nums\\s*=\\s*(\\[.*?\\]).*", "$1");
+                numsStr = numsStr.replaceAll("[\\[\\]]", "").trim();
+                String[] parts = numsStr.split("[,\\s]+");
+                nums = new int[parts.length];
+                for (int i = 0; i < parts.length; i++) {
+                    nums[i] = Integer.parseInt(parts[i]);
+                }
+            } else {
+                // Fallback parsing
+                String[] parts = input.split("[,\\s]+");
+                nums = new int[parts.length];
+                for (int i = 0; i < parts.length; i++) {
+                    nums[i] = Integer.parseInt(parts[i]);
+                }
+            }
+            
+            if (input.contains("target = ")) {
+                target = Integer.parseInt(input.replaceAll(".*target\\s*=\\s*(\\d+).*", "$1"));
+            }
+        }
+        
+        int[] result = twoSum(nums, target);
+        System.out.println(Arrays.toString(result));
+        scanner.close();
+    }
+}`;
+  }
+  
+  // Default generic function
+  else {
+    return `public class Main {
     public static int solve(int[] nums) {
         // TODO: Implement your solution here
         return nums.length; // placeholder
@@ -316,7 +531,9 @@ public class Main {
         System.out.println(result);
         scanner.close();
     }
-}`,
+}`;
+  }
+})()}`,
       
       cpp: `// ${problem.title || 'DSA Problem'}
 // Difficulty: ${problem.difficulty || 'Medium'}
